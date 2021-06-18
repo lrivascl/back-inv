@@ -69,7 +69,7 @@ public class TransaccionController {
 					.save(new Transaccion(transaccion.getTrx(),transaccion.getCodigoProducto(),transaccion.getUnidades(),
 							transaccion.getPrecio(),transaccion.getFechaTrx()));
 			
-			if(_transaccion.getTrx() == "STOCK") {
+			if(_transaccion.getTrx().equals("STOCK")) {
 				Optional<Producto> productoData = productoRepository.findByCodigo(_transaccion.getCodigoProducto());
 				
 				if(productoData.isPresent()) {
@@ -81,7 +81,7 @@ public class TransaccionController {
 					}
 					
 				}	
-			}else if(_transaccion.getTrx() == "VENTA"){
+			}else if(_transaccion.getTrx().equals("VENTA")){
 				Optional<Producto> productoData = productoRepository.findByCodigo(_transaccion.getCodigoProducto());
 				
 				if(productoData.isPresent()) {
