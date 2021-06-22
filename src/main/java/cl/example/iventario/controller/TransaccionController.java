@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.example.iventario.model.Producto;
 import cl.example.iventario.model.Transaccion;
+import cl.example.iventario.model.Cliente;
+import cl.example.iventario.repository.ClienteRepository;
 import cl.example.iventario.repository.ProductoRepository;
 import cl.example.iventario.repository.TransaccionRepository;
 
@@ -39,6 +41,9 @@ public class TransaccionController {
 	
 	@Autowired
 	ProductoRepository productoRepository;
+	
+	@Autowired
+	ClienteRepository clienteRepository;
 	
 	@GetMapping("/transacciones")
 	public ResponseEntity<List<Transaccion>> getAllTransaccion(@RequestParam(required = false) String trx) {
@@ -66,8 +71,10 @@ public class TransaccionController {
 	public ResponseEntity<Transaccion> CreateTrx (@RequestBody Transaccion transaccion){
 		try {
 			Transaccion _transaccion = transaccionRepository
-					.save(new Transaccion(transaccion.getTrx(),transaccion.getCodigoProducto(),transaccion.getUnidades(),
+					.save(new Transaccion(transaccion.getTrx(),transaccion.getName(),transaccion.getCodigoProducto(),transaccion.getUnidades(),
 							transaccion.getPrecio(),transaccion.getFechaTrx()));
+			
+			logger.info(_transaccion);
 			
 			if(_transaccion.getTrx().equals("STOCK")) {
 				Optional<Producto> productoData = productoRepository.findByCodigo(_transaccion.getCodigoProducto());
@@ -76,7 +83,7 @@ public class TransaccionController {
 					Producto _producto = productoData.get();
 					if(_producto.getCodigo() == _transaccion.getCodigoProducto()) {
 						
-						_producto.setCodigo(_producto.getCantidad()+_transaccion.getUnidades());
+						_producto.setCantidad(_producto.getCantidad()+_transaccion.getUnidades());
 						productoRepository.save(_producto);
 					}
 					
@@ -88,12 +95,25 @@ public class TransaccionController {
 					Producto _producto = productoData.get();
 					if(_producto.getCodigo() == _transaccion.getCodigoProducto()) {
 						
-						_producto.setCodigo(_producto.getCantidad()-_transaccion.getUnidades());
+						_producto.setCantidad(_producto.getCantidad()-_transaccion.getUnidades());
 						productoRepository.save(_producto);
 					}
 					
 				}	
 				
+			}
+			if(_transaccion.getName().isEmpty() == false) {
+				Optional<Cliente> clienteData = clienteRepository.findByNombreCli(_transaccion.getName());
+				
+				if(clienteData.isEmpty() == false) {
+					
+					Cliente _cliente = clienteData.get();
+					if(_cliente.getNombreCli().equals(_transaccion.getName())){
+						_cliente.setSaldoCompras(_cliente.getSaldoCompras()+_transaccion.getPrecio());
+						clienteRepository.save(_cliente);
+					}
+					
+				}
 			}
 			
 			return new ResponseEntity<>(_transaccion, HttpStatus.CREATED);

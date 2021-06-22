@@ -15,6 +15,9 @@ public class Transaccion {
 	@Column(name="trx")
 	private String trx;
 
+	@Column(name= "name")
+	private String name;
+
 	@Column(name="unidades")
 	private int unidades;
 	
@@ -31,9 +34,10 @@ public class Transaccion {
 		
 	}
 	
-	public Transaccion(String trx,long codigoProducto, int unidades, int precio, String fechaTrx) {
+	public Transaccion(String trx,String name,long codigoProducto, int unidades, int precio, String fechaTrx) {
 		super();
 		this.trx = trx;
+		this.name = name;
 		this.codigoProducto = codigoProducto;
 		this.unidades = unidades;
 		this.precio = precio;
@@ -54,6 +58,14 @@ public class Transaccion {
 
 	public void setTrx(String trx) {
 		this.trx = trx;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getUnidades() {
@@ -90,9 +102,10 @@ public class Transaccion {
 	
 	@Override
 	public String toString() {
-		return "Transaccion [idTrx=" + idTrx + ", trx=" + trx + ", unidades=" + unidades + ", codigoProducto="
-				+ codigoProducto + ", precio=" + precio + ", fechaTrx=" + fechaTrx + "]";
+		return "Transaccion [idTrx=" + idTrx + ", trx=" + trx + ", name=" + name + ", unidades=" + unidades
+				+ ", codigoProducto=" + codigoProducto + ", precio=" + precio + ", fechaTrx=" + fechaTrx + "]";
 	}
+
 
 }
 
