@@ -6,8 +6,7 @@ import java.util.Optional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.jboss.logging.Logger;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,7 +71,7 @@ public class TransaccionController {
 		try {
 			Transaccion _transaccion = transaccionRepository
 					.save(new Transaccion(transaccion.getTrx(),transaccion.getName(),transaccion.getCodigoProducto(),transaccion.getUnidades(),
-							transaccion.getPrecio(),transaccion.getFechaTrx()));
+							transaccion.getPrecio(),transaccion.getTotal(),transaccion.getFechaTrx()));
 			
 			logger.info(_transaccion);
 			
@@ -109,7 +108,7 @@ public class TransaccionController {
 					
 					Cliente _cliente = clienteData.get();
 					if(_cliente.getNombreCli().equals(_transaccion.getName())){
-						_cliente.setSaldoCompras(_cliente.getSaldoCompras()+_transaccion.getPrecio());
+						_cliente.setSaldoCompras(_cliente.getSaldoCompras()+_transaccion.getTotal());
 						clienteRepository.save(_cliente);
 					}
 					

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ import cl.example.iventario.repository.ClienteRepository;
 @RequestMapping("/api")
 public class ClienteController {
 	
+	private Log logger = LogFactory.getLog(TransaccionController.class);
+	
 	@Autowired
 	ClienteRepository clienteRepository;
 	
@@ -35,10 +39,15 @@ public class ClienteController {
 			
 			List<Cliente> clientes = new ArrayList<Cliente>();
 
-			if (nombreCli == null)
+			if (nombreCli == null) {
+				logger.info(clientes);
 				clienteRepository.findAll().forEach(clientes::add);
-			else
-				clienteRepository.findByNombreCliContaining(nombreCli).forEach(clientes::add);
+			}
+			else {
+				logger.info(clientes);
+				clienteRepository.findByNombreCliContaining(nombreCli).forEach(clientes::add);	
+			}
+				
 
 			if (clientes.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,7 +59,7 @@ public class ClienteController {
 		}
 	}
 	
-	@GetMapping("/clientes/{telefono}")
+	@GetMapping("/clientes/fono/{telefono}")
 	public ResponseEntity<List<Cliente>> getClienteByTelefono(@PathVariable("telefono") long telefono){
 		try {
 			List<Cliente> clientes = new ArrayList<Cliente>();
@@ -67,12 +76,22 @@ public class ClienteController {
 		}
 	}
 	
+	@GetMapping("/clientes/{idCliente}")
+	public ResponseEntity<Cliente> getClienteByIdCliente(@PathVariable("idCliente") long idCliente){
+		Optional<Cliente> clienteData = clienteRepository.findById(idCliente);
+		if(clienteData.isPresent()) {
+			return new ResponseEntity<>(clienteData.get(), HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 	@PostMapping("/clientes")
 	public ResponseEntity<Cliente> createCliente (@RequestBody Cliente cliente){
 		try {
 			Cliente _cliente = clienteRepository
 					.save(new Cliente(cliente.getNombreCli(), cliente.getTelefono(),
-							cliente.getEmail(),cliente.getFechaCreacion(),cliente.getSaldoCompras()));
+							cliente.getEmail(),cliente.getFechaCreacion(),cliente.getSaldoCompras(),cliente.getDescuento()));
 			
 			return new ResponseEntity<>(_cliente, HttpStatus.CREATED);
 		} catch(Exception e) {
@@ -81,7 +100,7 @@ public class ClienteController {
 	}
 	
 	@PutMapping("/clientes/{idCliente}")
-	public ResponseEntity<Cliente> updateCliente(@PathVariable("id_cliente") long idCliente, @RequestBody Cliente cliente){
+	public ResponseEntity<Cliente> updateCliente(@PathVariable("idCliente") long idCliente, @RequestBody Cliente cliente){
 		Optional<Cliente> clienteData = clienteRepository.findById(idCliente);
 		
 		if(clienteData.isPresent()) {
@@ -91,6 +110,7 @@ public class ClienteController {
 			_cliente.setEmail(cliente.getEmail());
 			_cliente.setFechaCreacion(cliente.getFechaCreacion());
 			_cliente.setSaldoCompras(cliente.getSaldoCompras());
+			_cliente.setDescuento(cliente.getDescuento());
 			return new ResponseEntity<>(clienteRepository.save(_cliente), HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

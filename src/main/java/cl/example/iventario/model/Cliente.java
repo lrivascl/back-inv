@@ -25,19 +25,23 @@ public class Cliente {
 	private String fechaCreacion;
 	
 	@Column(name="saldocompras")
-	private int saldoCompras;
+	private float saldoCompras;
 	
+	@Column(name="descuento")
+	private int descuento;
+
 	public Cliente() {
 		
 	}
 	
-	public Cliente(String nombreCli, long telefono, String email, String fechaCreacion, int saldoCompras) {
+	public Cliente(String nombreCli, long telefono, String email, String fechaCreacion, float saldoCompras, int descuento) {
 		super();
 		this.nombreCli = nombreCli;
 		this.telefono = telefono;
 		this.email = email;
 		this.fechaCreacion = fechaCreacion;
 		this.saldoCompras = saldoCompras;
+		this.descuento = descuento;
 	}
 	
 	public long getIdCliente() {
@@ -80,17 +84,28 @@ public class Cliente {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-	public int getSaldoCompras() {
+	public float getSaldoCompras() {
 		return saldoCompras;
 	}
 
-	public void setSaldoCompras(int saldoCompras) {
+	public void setSaldoCompras(float saldoCompras) {
 		this.saldoCompras = saldoCompras;
 	}
 	
+	public int getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(int descuento) {
+		this.descuento = descuento;
+	}
+
 	@Override
 	public String toString() {
 		return "Cliente [idCliente=" + idCliente + ", nombreCli=" + nombreCli + ", telefono=" + telefono + ", email="
-				+ email + ", fechaCreacion=" + fechaCreacion + ", saldoCompras=" + saldoCompras + "]";
+				+ email + ", fechaCreacion=" + fechaCreacion + ", saldoCompras=" + saldoCompras + ", descuento="
+				+ descuento + "]";
 	}
+	
+	
 }

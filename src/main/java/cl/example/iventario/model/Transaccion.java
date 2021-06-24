@@ -27,20 +27,25 @@ public class Transaccion {
 	@Column(name="precio")
 	private int precio;
 	
+	@Column(name="total")
+	private float total;
+	
 	@Column(name="fechatrx")
 	private String fechaTrx;
-	
+
+
 	public Transaccion () {
 		
 	}
 	
-	public Transaccion(String trx,String name,long codigoProducto, int unidades, int precio, String fechaTrx) {
+	public Transaccion(String trx,String name,long codigoProducto, int unidades, int precio,float total, String fechaTrx) {
 		super();
 		this.trx = trx;
 		this.name = name;
 		this.codigoProducto = codigoProducto;
 		this.unidades = unidades;
 		this.precio = precio;
+		this.total = total;
 		this.fechaTrx = fechaTrx;
 	}
 	
@@ -91,6 +96,14 @@ public class Transaccion {
 	public void setPrecio(int precio) {
 		this.precio = precio;
 	}
+	
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
 
 	public String getFechaTrx() {
 		return fechaTrx;
@@ -99,13 +112,13 @@ public class Transaccion {
 	public void setFechaTrx(String fechaTrx) {
 		this.fechaTrx = fechaTrx;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Transaccion [idTrx=" + idTrx + ", trx=" + trx + ", name=" + name + ", unidades=" + unidades
-				+ ", codigoProducto=" + codigoProducto + ", precio=" + precio + ", fechaTrx=" + fechaTrx + "]";
+				+ ", codigoProducto=" + codigoProducto + ", precio=" + precio + ", total=" + total + ", fechaTrx="
+				+ fechaTrx + "]";
 	}
-
 
 }
 

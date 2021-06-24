@@ -20,6 +20,8 @@ public class Producto {
 	@Column(name ="cantidad")
 	private int cantidad;
 	
+	@Column(name ="precio")
+	private float precio;
 
 	@Column(name = "descripcion")
 	private String descripcion;
@@ -31,10 +33,11 @@ public class Producto {
 
 	}
 	
-	public Producto(String nombre, long codigo,int cantidad,String descripcion, boolean published) {
+	public Producto(String nombre, long codigo,int cantidad,float precio,String descripcion, boolean published) {
 		this.nombre = nombre;
 		this.codigo = codigo;
 		this.cantidad = cantidad;
+		this.precio = precio;
 		this.descripcion = descripcion;
 		this.published = published;
 	}
@@ -78,6 +81,14 @@ public class Producto {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+	
+	public float getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(float precio) {
+		this.precio = precio;
+	}
 
 	public boolean isPublished() {
 		return published;
@@ -89,9 +100,10 @@ public class Producto {
 
 	@Override
 	public String toString() {
-		return "Producto [id=" + id + ", nombre=" + nombre + ", codigo=" + codigo + ",cantidad=" + "cantidad" + ", descripcion=" 
-				+ descripcion + ", published=" + published + "]";
+		return "Producto [id=" + id + ", nombre=" + nombre + ", codigo=" + codigo + ", cantidad=" + cantidad
+				+ ", precio=" + precio + ", descripcion=" + descripcion + ", published=" + published + "]";
 	}
+
 	
 	
 	

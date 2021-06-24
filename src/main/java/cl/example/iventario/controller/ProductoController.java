@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import cl.example.iventario.repository.ProductoRepository;
 @RequestMapping("/api")
 public class ProductoController {
 		
+	private Log logger = LogFactory.getLog(TransaccionController.class);
 	
 	@Autowired
 	ProductoRepository productoRepository;
@@ -66,7 +69,9 @@ public class ProductoController {
 		try {
 			
 			Producto _producto = productoRepository
-					.save(new Producto(producto.getNombre(), producto.getCodigo(),producto.getCantidad(),producto.getDescripcion(), false));
+					.save(new Producto(producto.getNombre(), producto.getCodigo(),producto.getCantidad(),producto.getPrecio()
+							,producto.getDescripcion(), false));
+			logger.info(_producto);
 			return new ResponseEntity<>(_producto, HttpStatus.CREATED);
 		} catch (Exception e){
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,6 +87,7 @@ public class ProductoController {
 			_producto.setNombre(producto.getNombre());
 			_producto.setCodigo(producto.getCodigo());
 			_producto.setDescripcion(producto.getDescripcion());
+			_producto.setPrecio(producto.getPrecio());
 			_producto.setPublished(producto.isPublished());
 			
 			return new ResponseEntity<>(productoRepository.save(_producto), HttpStatus.OK);
